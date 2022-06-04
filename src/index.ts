@@ -1,4 +1,4 @@
-import FeedMe from "./FeedMe";
+import FeedMe from "./GetNutirent/FeedMe";
 
 import { testGetType } from "./test/FeedMe.test";
 

@@ -1,5 +1,5 @@
 // 按块划分处理不同类型 问题的方法， 块之间的分割符是 @@@@
-import getType from "./util/getType";
+import getType from "../util/getType";
 
 /**
  * ecto 是外胚型
@@ -167,7 +167,7 @@ export default class FeedMe {
 
   //@@@@需要高碳日、低碳日、中碳日   以周为单位进行循环@@@@
   /**
-   * 
+   *
    * @returns  根据PerDay方法返回的范围值的结果*7，得出每周需要的碳水总营养素的范围
    */
   public calculateCarbonHydratePerWeek: calculateFn = () => {
@@ -354,7 +354,7 @@ export default class FeedMe {
       if (item === undefined) {
         return undefined;
       }
-      return (item * percentage) / totalDays;
+      return parseFloat(((item * percentage) / totalDays).toFixed(1));
     });
     return resultRange as nutrientRange;
   }

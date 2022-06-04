@@ -5,12 +5,14 @@
   "private": true,
   "scripts": {
     "watch": "webpack --watch",
-    "dev": "nodemon dist/bundle.js"
+    "runBundle": "nodemon dist/bundle.js",
+    "dev":"concurrently \"npm:watch\" \"npm:runBundle\""
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "concurrently": "^7.2.1",
     "nodemon": "^2.0.16",
     "ts-loader": "^9.3.0",
     "ts-node": "^10.8.0",
