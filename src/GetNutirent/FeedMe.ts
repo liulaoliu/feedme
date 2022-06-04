@@ -17,25 +17,34 @@ type nutrientRange = [number, number] | [number, undefined];
 
 /**
  * https://stackoverflow.com/questions/53985074/typescript-how-to-add-an-item-to-a-tuple
- * 向 nutrientRange 加入 字符串以增加返回数据的可读性
+ * 向 nutrientRange 加入 字符串以增加返回数据的可读性,
+ * 形式 是 [ 58.8, undefined, 'mediumCarbonDayfat/中碳日脂肪' ]
  */
-type enhancedNutrientRange<I, T extends unknown[]> = [...T, I];
-
+type enhancedTuple<I, T extends unknown[]> = [...T, I];
+export type enhancedNutrientRange = enhancedTuple<string, nutrientRange>;
 /**
  * 规定了FeedMe上按照PerDay形式 来计算Ch、Fat、Pro的 方法的类型
  */
 type calculateFn = () => nutrientRange;
 
-type nutrient = {
+export type nutrient = {
   carbonHydrate?: nutrientRange;
   fat?: nutrientRange;
   protein?: nutrientRange;
 };
 
+export type enhancedNutrient = {
+  [key in keyof nutrient]: enhancedNutrientRange;
+};
 /**
  * 返回一个 nutrient 对象的方法
  */
 type returnNutrientFn = () => nutrient;
+type returnEnhancedNutrientFn = () => enhancedNutrient;
+/**
+ * 可以计算x碳日 需要摄入的碳水化合物、脂肪、蛋白质营养素含量
+ * 当制作碳水循环方法的饮食食谱的时候可以用来作为参考。
+ */
 export default class FeedMe {
   /**体重 */
   private weight: number;
@@ -58,8 +67,8 @@ export default class FeedMe {
 
   /**
    * 通过接受体重和 身体类型 来初始化 FeedMe实例
-   * @param weight
-   * @param bodytype
+   * @param weight 体重
+   * @param bodytype 身体类型
    */
   constructor(weight: number, bodytype: bodyType) {
     //   判空
@@ -90,7 +99,7 @@ export default class FeedMe {
    * 注意，这是营养素含量而不是总重
    * @returns 一个包含 碳水化合物含量范围值的数组 当第二个值为 undefined 则碳水化合物含量为固定值 返回值以g为单位
    */
-  public calculateCarbonHydratePerDay: calculateFn = () => {
+  private calculateCarbonHydratePerDay: calculateFn = () => {
     return FeedMe.calculateHelper(this, "Ch");
   };
 
@@ -99,7 +108,7 @@ export default class FeedMe {
    * 注意，这是营养素含量而不是总重
    * @returns 一个包含 脂肪含量范围值的数组 当第二个值为 undefined 则脂肪含量为固定值 返回值以g为单位
    */
-  public calculateFatPerDay: calculateFn = () => {
+  private calculateFatPerDay: calculateFn = () => {
     return FeedMe.calculateHelper(this, "Fat");
   };
 
@@ -108,7 +117,7 @@ export default class FeedMe {
    * 注意，这是营养素含量而不是总重
    * @returns 一个包含 蛋白质含量范围值的数组 当第二个值为 undefined 则蛋白质含量为固定值 返回值以g为单位
    */
-  public calculateProPerDay: calculateFn = () => {
+  private calculateProPerDay: calculateFn = () => {
     return FeedMe.calculateHelper(this, "Pro");
   };
 
@@ -170,7 +179,7 @@ export default class FeedMe {
    *
    * @returns  根据PerDay方法返回的范围值的结果*7，得出每周需要的碳水总营养素的范围
    */
-  public calculateCarbonHydratePerWeek: calculateFn = () => {
+  private calculateCarbonHydratePerWeek: calculateFn = () => {
     return FeedMe.getNutrientRangePerWeekhelper(
       this.calculateCarbonHydratePerDay()
     );
@@ -179,14 +188,14 @@ export default class FeedMe {
    *
    * @returns  根据PerDay方法返回的范围值的结果*7，得出每周需要的脂肪营养素的范围
    */
-  public calculateFatPerWeek: calculateFn = () => {
+  private calculateFatPerWeek: calculateFn = () => {
     return FeedMe.getNutrientRangePerWeekhelper(this.calculateFatPerDay());
   };
   /**
    *
    * @returns  根据PerDay方法返回的范围值的结果*7，得出每周需要的蛋白质营养素的范围
    */
-  public calculateProPerWeek: calculateFn = () => {
+  private calculateProPerWeek: calculateFn = () => {
     return FeedMe.getNutrientRangePerWeekhelper(this.calculateProPerDay());
   };
 
@@ -213,7 +222,7 @@ export default class FeedMe {
    *高碳日 2天，碳水摄入50%，fat摄入15%;
    * @returns 返回一周中高碳日的每天 碳水、脂肪、蛋白质营养素摄入量
    */
-  public getHighCarbonDayNutrient: returnNutrientFn = () => {
+  public getHighCarbonDayNutrient: returnEnhancedNutrientFn = () => {
     /**
      * 高碳日 2天 碳水 脂肪 蛋白质比例为 50% 15% 35%
      */
@@ -230,7 +239,7 @@ export default class FeedMe {
    * @returns 返回一周中高碳日的每天 碳水、脂肪、蛋白质营养素摄入量
    */
 
-  public getMediumCarbonDayNutrient: returnNutrientFn = () => {
+  public getMediumCarbonDayNutrient: returnEnhancedNutrientFn = () => {
     /**
      * 中碳日 3天 碳水 脂肪 蛋白质比例为 35% 35% 30%
      */
@@ -246,7 +255,7 @@ export default class FeedMe {
    *低碳日 2天，碳水摄入15%，fat摄入50%;
    * @returns 返回一周中高碳日的每天 碳水、脂肪、蛋白质营养素摄入量
    */
-  public getLowCarbonDayNutrient: returnNutrientFn = () => {
+  public getLowCarbonDayNutrient: returnEnhancedNutrientFn = () => {
     /**
      * 低碳日   2天 碳水 脂肪 蛋白质比例为 15% 50% 35%
      */
@@ -268,7 +277,7 @@ export default class FeedMe {
     Object.assign(copyObj, nutrientObj);
 
     for (const [key, value] of Object.entries(copyObj)) {
-      (value as unknown as enhancedNutrientRange<string, nutrientRange>).push(
+      (value as unknown as enhancedTuple<string, nutrientRange>).push(
         englishInfo + key + "/" + chineseInfo + FeedMe.translateHelper(key)
       );
     }
@@ -345,7 +354,7 @@ export default class FeedMe {
    * @param totalDays 某碳日的总天数
    * @returns
    */
-  public static calculatePerDayNutrientByPercentageAndTotalDays(
+  private static calculatePerDayNutrientByPercentageAndTotalDays(
     weekArray: nutrientRange,
     percentage: number,
     totalDays: number
