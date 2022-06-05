@@ -12,6 +12,10 @@ const feeder = new FeedMe(90, "endomorph");
 // console.log(feeder.getLowCarbonDayNutrient());
 
 const range = feeder.getHighCarbonDayNutrient();
-const actualFood = ActualFoodWeight.getActualWeight(range, 25, "大米");
 
-console.log("**********", actualFood, "***********");
+const actualFood = ActualFoodWeight.getActualFoodWeight(range.carbonHydrate, {
+  nutrientPer100Gram: 25,
+  name: "米饭",
+});
+
+console.log("[**********==>", actualFood, "<==***********]");
