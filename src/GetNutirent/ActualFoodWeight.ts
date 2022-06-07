@@ -19,13 +19,13 @@ export default class ActualFoodWeight {
   // * 比如对米饭，100g 含有25gch 营养素，需要315gch营养素，就需要 100/25 *315 g 米饭
 
   /**
-   * 通过一个ch/fat/protein营养素的范围，配合传入的 食物的营养素含量和名字 ,给出需要摄入的食物的实际重量
+   * 根据要求，你今天可以吃多少 xx食物
    *
    * @param nutrientRange 营养素摄入量范围 (带有文字描述的增强版)，比如可以传入new FeedMe().getHighCarbonDayNutrient().carbonHydrate
    * @param nutrientPer100Gram 想要计算(吃)的食物的营养素含量
    * @param foodName 食物名称
    */
-  public static getActualFoodWeight(
+  public static getSingleKindFooActualWeight(
     nutrientRange: enhancedNutrientRange,
     food: foodInfo
   ) {

@@ -5,8 +5,10 @@
   "private": true,
   "scripts": {
     "watch": "webpack --watch",
-    "runBundle": "nodemon dist/bundle.js",
-    "dev":"concurrently \"npm:watch\" \"npm:runBundle\""
+    "runApp": "nodemon dist/app.bundle.js",
+    "runTest": "nodemon dist/test.bundle.js",
+    "dev": "concurrently \"npm:watch\" \"npm:runApp\"",
+    "test": "concurrently \"npm:watch\" \"npm:runTest\""
   },
   "keywords": [],
   "author": "",
