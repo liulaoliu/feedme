@@ -28,3 +28,4 @@ export function testGetHighCarbonDayNutrient() {
     console.log(`高碳日脂肪应为${fatTotal},实为${fatResult}.....FAIL`);
   }
 }
+

@@ -1,5 +1,8 @@
 import { testGetType } from "./getType.test";
 import { testGetHighCarbonDayNutrient } from "./FeedMe.test";
-testGetType(); //pass
+import { testGetSingleKindFooActualWeightOneMeal } from "./ActualWeigh.test";``
+// testGetType(); //pass
 
-testGetHighCarbonDayNutrient(); // pass
+// testGetHighCarbonDayNutrient(); // pass
+
+testGetSingleKindFooActualWeightOneMeal();
