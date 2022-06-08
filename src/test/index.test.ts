@@ -1,5 +1,5 @@
 import { testGetType } from "./getType.test";
 import { testGetHighCarbonDayNutrient } from "./FeedMe.test";
-testGetType(); //pass
+// testGetType(); //pass
 
-testGetHighCarbonDayNutrient(); // pass
+// testGetHighCarbonDayNutrient(); // pass
