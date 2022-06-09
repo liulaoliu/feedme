@@ -25,7 +25,8 @@ export type enhancedNutrientRange = enhancedTuple<string, nutrientRange>;
 /**
  * 规定了FeedMe上按照PerDay形式 来计算Ch、Fat、Pro的 方法的类型
  */
-type calculateFn = () => nutrientRange;
+type nutrientTypes = "Ch" | "Fat" | "Pro";
+type calculateFn = (type: nutrientTypes) => nutrientRange;
 
 export type nutrient = {
   carbonHydrate?: nutrientRange;
@@ -95,30 +96,14 @@ export default class FeedMe {
 
   // @@@@按体重和体型计算每日需要的ch,fat,pro 营养素含量 的重量@@@@
   /**
-   *  * 按照体重计算每日碳水化合物需求的重量，
+   *  * 按照体重计算每日某种营养素需求的重量，
    * 注意，这是营养素含量而不是总重
    * @returns 一个包含 碳水化合物含量范围值的数组 当第二个值为 undefined 则碳水化合物含量为固定值 返回值以g为单位
    */
-  private calculateCarbonHydratePerDay: calculateFn = () => {
-    return FeedMe.calculateHelper(this, "Ch");
-  };
-
-  /**
-   *  * 按照体重计算每日脂肪需求的重量，
-   * 注意，这是营养素含量而不是总重
-   * @returns 一个包含 脂肪含量范围值的数组 当第二个值为 undefined 则脂肪含量为固定值 返回值以g为单位
-   */
-  private calculateFatPerDay: calculateFn = () => {
-    return FeedMe.calculateHelper(this, "Fat");
-  };
-
-  /**
-   *  * 按照体重计算每日蛋白质需求的重量，
-   * 注意，这是营养素含量而不是总重
-   * @returns 一个包含 蛋白质含量范围值的数组 当第二个值为 undefined 则蛋白质含量为固定值 返回值以g为单位
-   */
-  private calculateProPerDay: calculateFn = () => {
-    return FeedMe.calculateHelper(this, "Pro");
+  private calculateATypeOfNutrientPerDay: calculateFn = (
+    nutrientType: "Ch" | "Fat" | "Pro"
+  ) => {
+    return FeedMe.calculateHelper(this, nutrientType);
   };
 
   /**
@@ -130,12 +115,12 @@ export default class FeedMe {
    */
   private static calculateHelper(
     instance: FeedMe,
-    thingsToCalculate: "Ch" | "Fat" | "Pro"
+    thingsToCalculate: nutrientTypes
   ) {
-    const thingsCanCalculate = ["Ch", "Fat", "Pro"];
+    const thingsCanCalculate: nutrientTypes[] = ["Ch", "Fat", "Pro"];
     if (thingsCanCalculate.includes(thingsToCalculate) === false) {
       throw new Error(
-        `calculateHelper在第二个形参上接受了错误的参数，不能计算类型为${thingsToCalculate}的项目`
+        `calculateHelper在第二个形参上接受了错误的参数,不能计算类型为${thingsToCalculate}的项目`
       );
     }
     if (instance.bodyType === "ectomorph") {
@@ -177,26 +162,14 @@ export default class FeedMe {
   //@@@@需要高碳日、低碳日、中碳日   以周为单位进行循环@@@@
   /**
    *
-   * @returns  根据PerDay方法返回的范围值的结果*7，得出每周需要的碳水总营养素的范围
+   * @returns  根据PerDay方法返回的范围值的结果*7，得出每周需要的某种营养素的范围
    */
-  private calculateCarbonHydratePerWeek: calculateFn = () => {
+  private calculateATypeOfNutrientPerWeek: calculateFn = (
+    nutrientType: "Ch" | "Fat" | "Pro"
+  ) => {
     return FeedMe.getNutrientRangePerWeekhelper(
-      this.calculateCarbonHydratePerDay()
+      this.calculateATypeOfNutrientPerDay(nutrientType)
     );
-  };
-  /**
-   *
-   * @returns  根据PerDay方法返回的范围值的结果*7，得出每周需要的脂肪营养素的范围
-   */
-  private calculateFatPerWeek: calculateFn = () => {
-    return FeedMe.getNutrientRangePerWeekhelper(this.calculateFatPerDay());
-  };
-  /**
-   *
-   * @returns  根据PerDay方法返回的范围值的结果*7，得出每周需要的蛋白质营养素的范围
-   */
-  private calculateProPerWeek: calculateFn = () => {
-    return FeedMe.getNutrientRangePerWeekhelper(this.calculateProPerDay());
   };
 
   /**
@@ -300,7 +273,7 @@ export default class FeedMe {
       case "carbonHydrate":
         return "碳水化合物";
       default:
-        return "translateHelper接受了错误的参数：" + str;
+        return "translateHelper接受了错误的参数:" + str;
     }
   }
 
@@ -328,18 +301,18 @@ export default class FeedMe {
     /**FeedMe实例的 实际周消耗量范围值 */
     const carbonHydrate =
       FeedMe.calculatePerDayNutrientByPercentageAndTotalDays(
-        instance.calculateCarbonHydratePerWeek(),
+        instance.calculateATypeOfNutrientPerWeek("Ch"),
         Ration[0],
         totalDays
       );
 
     const fat = FeedMe.calculatePerDayNutrientByPercentageAndTotalDays(
-      instance.calculateFatPerWeek(),
+      instance.calculateATypeOfNutrientPerWeek("Fat"),
       Ration[1],
       totalDays
     );
     const protein = FeedMe.calculatePerDayNutrientByPercentageAndTotalDays(
-      instance.calculateProPerWeek(),
+      instance.calculateATypeOfNutrientPerWeek("Pro"),
       Ration[2],
       totalDays
     );

@@ -44,7 +44,8 @@ export default class ActualFoodWeight {
     return result;
   }
   /**
-   *根据要求，你每顿饭可以吃 xx食物 共计 多少
+   *传入 **单日** 需要的的营养素范围，你每顿饭可以吃 xx食物 共计 多少
+
    * @param nutrientRange 营养素摄入量范围 (带有文字描述的增强版)，比如可以传入new FeedMe().getHighCarbonDayNutrient().carbonHydrate
    * @param food 想要计算(吃)的食物的营养素含量
    */
