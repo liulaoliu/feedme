@@ -18,12 +18,12 @@ export function testGetSingleKindFooActualWeightOneMeal() {
     name: "燕麦片",
   };
 
-  const actualByRice = ActualFoodWeight.getSingleKindFooActualWeightOneMeal(
+  const actualByRice = ActualFoodWeight.getSingleKindFoodActualWeightOneMeal(
     [315, undefined, "ddd"],
     rice
   );
 
-  const actualByOats = ActualFoodWeight.getSingleKindFooActualWeightOneMeal(
+  const actualByOats = ActualFoodWeight.getSingleKindFoodActualWeightOneMeal(
     [315, undefined, "ddd"],
     oats
   );

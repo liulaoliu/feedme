@@ -1,9 +1,11 @@
-import { nutrient, enhancedNutrientRange, enhancedNutrient } from "./FeedMe";
+import { nutrient, enhancedNutrientRange, enhancedNutrient,nutrientTypes } from "./FeedMe";
 /**
  *  规定了一个“食物”应该包含的数据
  */
+
 export interface foodInfo {
   majorNutrientPer100Gram: number;
+  majorNutrientType?:nutrientTypes,
   name: string;
   englishName?: string;
 }
@@ -24,7 +26,7 @@ export default class ActualFoodWeight {
    * @param nutrientRange 营养素摄入量范围 (带有文字描述的增强版)，比如可以传入new FeedMe().getHighCarbonDayNutrient().carbonHydrate
    * @param nutrientPer100Gram 想要计算(吃)的食物的营养素含量
    */
-  public static getSingleKindFooActualWeightThreeMeals(
+  public static getSingleKindFoodActualWeightThreeMeals(
     nutrientRange: enhancedNutrientRange,
     food: foodInfo
   ) {
@@ -49,14 +51,16 @@ export default class ActualFoodWeight {
    * @param nutrientRange 营养素摄入量范围 (带有文字描述的增强版)，比如可以传入new FeedMe().getHighCarbonDayNutrient().carbonHydrate
    * @param food 想要计算(吃)的食物的营养素含量
    */
-  public static getSingleKindFooActualWeightOneMeal(
+  public static getSingleKindFoodActualWeightOneMeal(
     nutrientRange: enhancedNutrientRange,
     food: foodInfo
   ) {
     // 这样 可以估算一顿大概吃多少 xx 食物
-    return this.getSingleKindFooActualWeightThreeMeals(nutrientRange, {
+    return this.getSingleKindFoodActualWeightThreeMeals(nutrientRange, {
       ...food,
       majorNutrientPer100Gram: food.majorNutrientPer100Gram * 3,
     });
   }
+
+  public static calculateFood(){}
 }

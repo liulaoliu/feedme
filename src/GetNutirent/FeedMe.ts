@@ -25,7 +25,7 @@ export type enhancedNutrientRange = enhancedTuple<string, nutrientRange>;
 /**
  * 规定了FeedMe上按照PerDay形式 来计算Ch、Fat、Pro的 方法的类型
  */
-type nutrientTypes = "Ch" | "Fat" | "Pro";
+export type nutrientTypes = "Ch" | "Fat" | "Pro";
 type calculateFn = (type: nutrientTypes) => nutrientRange;
 
 export type nutrient = {
