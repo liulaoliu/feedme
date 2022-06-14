@@ -1,5 +1,6 @@
 // 按块划分处理不同类型 问题的方法， 块之间的分割符是 @@@@
 import getType from "../util/getType";
+export { enhancedNutrient, nutrient, nutrientTypes, enhancedNutrientRange };
 
 /**
  * ecto 是外胚型
@@ -21,20 +22,19 @@ type nutrientRange = [number, number] | [number, undefined];
  * 形式 是 [ 58.8, undefined, 'mediumCarbonDayfat/中碳日脂肪' ]
  */
 type enhancedTuple<I, T extends unknown[]> = [...T, I];
-export type enhancedNutrientRange = enhancedTuple<string, nutrientRange>;
+type enhancedNutrientRange = enhancedTuple<string, nutrientRange>;
 /**
  * 规定了FeedMe上按照PerDay形式 来计算Ch、Fat、Pro的 方法的类型
  */
-export type nutrientTypes = "Ch" | "Fat" | "Pro";
+type nutrientTypes = "Ch" | "Fat" | "Pro";
 type calculateFn = (type: nutrientTypes) => nutrientRange;
-
-export type nutrient = {
+type nutrient = {
   carbonHydrate?: nutrientRange;
   fat?: nutrientRange;
   protein?: nutrientRange;
 };
 
-export type enhancedNutrient = {
+type enhancedNutrient = {
   [key in keyof nutrient]: enhancedNutrientRange;
 };
 /**
@@ -45,6 +45,7 @@ type returnEnhancedNutrientFn = () => enhancedNutrient;
 /**
  * 可以计算x碳日 需要摄入的碳水化合物、脂肪、蛋白质营养素含量
  * 当制作碳水循环方法的饮食食谱的时候可以用来作为参考。
+ *
  */
 export default class FeedMe {
   /**体重 */
@@ -67,9 +68,9 @@ export default class FeedMe {
   private static readonly ectomorphPro: nutrientRange = [0.8, 1.5];
 
   /**
-   * 通过接受体重和 身体类型 来初始化 FeedMe实例
-   * @param weight 体重
-   * @param bodytype 身体类型
+   *
+   * @param weight  (Kg/公斤)
+   * @param bodytype (endomorph易胖/ectomorph不易胖)
    */
   constructor(weight: number, bodytype: bodyType) {
     //   判空
@@ -239,7 +240,21 @@ export default class FeedMe {
       "低碳日"
     );
   };
-
+  /**
+   * 一次性获取高中低碳日的营养素摄入量
+   * get 3 groups of nutrient intake at one time.
+   */
+  public getHighMediumLowCarbonDayNutrientGroup() {
+    const group = {} as {
+      highCarbonDay: enhancedNutrient;
+      mediumCarbonDay: enhancedNutrient;
+      lowCarbonDay: enhancedNutrient;
+    };
+    group.highCarbonDay = this.getHighCarbonDayNutrient();
+    group.mediumCarbonDay = this.getMediumCarbonDayNutrient();
+    group.lowCarbonDay = this.getLowCarbonDayNutrient();
+    return group;
+  }
   private static addInfoToNutrientArrHelper(
     nutrientObj: nutrient,
     englishInfo: string,
